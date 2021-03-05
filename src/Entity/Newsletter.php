@@ -21,6 +21,11 @@ class Newsletter implements \JsonSerializable
      */
     private $UserMail;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $date;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -37,7 +42,21 @@ class Newsletter implements \JsonSerializable
 
         return $this;
     }
-    
+
+
+
+    public function getDate(): ?string
+    {
+        return $this->date;
+    }
+
+    public function setDate(?string $date): self
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
     public function jsonSerialize() {
 
         return  get_object_vars($this);

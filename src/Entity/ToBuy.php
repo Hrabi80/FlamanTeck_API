@@ -85,10 +85,7 @@ class ToBuy implements \JsonSerializable
      */
     private $Vcaract;
 
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Gallery", mappedBy="ID_House", cascade={"persist", "remove"})
-     */
-    private $gallery;
+
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Transport", mappedBy="house_id", cascade={"persist", "remove"},orphanRemoval=true)
@@ -270,22 +267,7 @@ class ToBuy implements \JsonSerializable
         return $this;
     }
 
-    public function getGallery(): ?Gallery
-    {
-        return $this->gallery;
-    }
 
-    public function setGallery(Gallery $gallery): self
-    {
-        $this->gallery = $gallery;
-
-        // set the owning side of the relation if necessary
-        if ($this !== $gallery->getIDHouse()) {
-            $gallery->setIDHouse($this);
-        }
-
-        return $this;
-    }
 
     public function getTransport(): ?Transport
     {
