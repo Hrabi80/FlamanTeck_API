@@ -39,7 +39,7 @@ class Portfolio implements \JsonSerializable
     private $client;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=2255)
      */
     private $description;
 

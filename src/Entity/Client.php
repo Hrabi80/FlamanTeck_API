@@ -4,31 +4,21 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
+use App\Entity\User as Admin;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ClientRepository")
  */
-class User extends BaseUser implements \JsonSerializable
+class Client extends Admin implements \JsonSerializable
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
 
-    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $tel;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $lien;
+    private $lien_util;
 
     /**
      * @Assert\File(
@@ -40,6 +30,11 @@ class User extends BaseUser implements \JsonSerializable
      */
 
    private $photo;
+
+   /**
+    * @ORM\Column(type="string", length=255, nullable=true)
+    */
+   private $tel;
 
     public function getId(): ?int
     {
@@ -70,24 +65,16 @@ class User extends BaseUser implements \JsonSerializable
     {
         return $this->username;
     }
-    public function getPhoto(): ?string
+
+    /**
+     * Gets the last login time.
+     *
+     * @return \DateTime|null
+     */
+    public function getLastLogin()
     {
-        return $this->photo;
+        return $this->lastLogin;
     }
-
-    /*
-    * Sets file.
-    *
-    * @param UploadedFile $photo
-    */
-
-    public function setPhoto(string $photo): self
-    {
-        $this->photo = $photo;
-
-        return $this;
-    }
-
 
         /**
      * Set mail
@@ -118,7 +105,36 @@ class User extends BaseUser implements \JsonSerializable
     }
 
 
+    /*
+    * Sets file.
+    *
+    * @param UploadedFile $photo
+    */
 
+    public function setPhoto(string $photo): self
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
+
+
+        public function jsonSerialize() {
+
+        return  get_object_vars($this);
+    }
+
+        public function getLienUtil(): ?string
+        {
+            return $this->lien_util;
+        }
+
+        public function setLienUtil(?string $lien_util): self
+        {
+            $this->lien_util = $lien_util;
+
+            return $this;
+        }
 
         public function getTel(): ?string
         {
@@ -131,21 +147,4 @@ class User extends BaseUser implements \JsonSerializable
 
             return $this;
         }
-
-        public function getLien(): ?string
-        {
-            return $this->lien;
-        }
-
-        public function setLien(?string $lien): self
-        {
-            $this->lien = $lien;
-
-            return $this;
-        }
-
-        public function jsonSerialize() {
-
-        return  get_object_vars($this);
-    }
 }
