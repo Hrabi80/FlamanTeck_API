@@ -24,7 +24,7 @@ class UserController extends AbstractController
       $arrayCollection = array();
       foreach($ser as $item) {
       $arrayCollection[] = array(
-      'id' => $item->getId(),
+       'id' => $item->getId(),
        'name' => $item->getUsername(),
        'mail'=> $item->getMail(),
        'tel'=> $item->getTel(),
@@ -105,6 +105,51 @@ public function deleteClient($id){
     $em->flush();
 
     return new JsonResponse(array('success' => true));
+}
+
+
+/**
+ * @Route("/clientById/{id}")
+ */
+public function getClientById($id){
+    $em = $this->getDoctrine()->getManager();
+    $info = $em->getRepository('App:User')->find($id);
+    return new JsonResponse($info);
+}
+
+
+/**
+ * @Route("/update/{id}" , name="updateClient", methods="PUT")
+ * @param int $id
+ */
+public function updateClient(Request $request,$id){
+  $data = json_decode($request->getContent(), true);
+  $entityManager = $this->getDoctrine()->getManager();
+
+  $info = $entityManager->getRepository(User::class)->find($id);
+  $info->setUsername($data['username']);
+  $info->setEmail($data['email']);
+  $info->setLien($data['lient']);
+  $info->setTel($data['tel']);
+
+  $entityManager->flush();
+  return new JsonResponse(array('success' => true));
+}
+
+/**
+ * @Route("/updatePassword/{id}" , name="updatePassword", methods="PUT")
+ * @param int $id
+ */
+public function updatePassword(Request $request,$id, UserPasswordEncoderInterface $encoder){
+  $data = json_decode($request->getContent(), true);
+  $entityManager = $this->getDoctrine()->getManager();
+
+  $info = $entityManager->getRepository(User::class)->find($id);
+  $encoded = $encoder->encodePassword($info, $request->get('password'));
+  $info->setPassword($encoded);
+
+  $entityManager->flush();
+  return new JsonResponse(array('success' => true));
 }
 
 

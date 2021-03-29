@@ -38,4 +38,25 @@ class ContactController extends AbstractController
     }
 
 
+    /**
+     * @Route("/contact/all")
+     */
+    public function getMessages(){
+        $em = $this->getDoctrine()->getManager();
+        $ser = $em->getRepository('App:Contact')->findAll();
+        return new JsonResponse($ser);
+    }
+
+    /**
+     * @Route("/contact/delete/{id}")
+     */
+    public function deleteMessage($id){
+        $em = $this->getDoctrine()->getManager();
+        $devis = $em->getRepository('App:Contact')->find($id);
+        $em->remove($devis);
+        $em->flush();
+        return new JsonResponse(array('success' => true));
+    }
+
+
 }

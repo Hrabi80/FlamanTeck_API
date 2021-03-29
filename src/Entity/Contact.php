@@ -31,6 +31,11 @@ class Contact implements \JsonSerializable
      */
     private $message;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $date;
+
 
     public function getId(): ?int
     {
@@ -75,5 +80,17 @@ class Contact implements \JsonSerializable
     public function jsonSerialize() {
 
         return  get_object_vars($this);
+    }
+
+    public function getDate(): ?string
+    {
+        return $this->date;
+    }
+
+    public function setDate(?string $date): self
+    {
+        $this->date = $date;
+
+        return $this;
     }
 }

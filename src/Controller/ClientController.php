@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use App\Entity\Devis;
 use App\Entity\Service;
 use App\Entity\Newsletter;
+use App\Entity\Contact;
 
 
 
@@ -46,6 +47,26 @@ class ClientController extends AbstractController
 
      return new JsonResponse(array('success' => true));
  }
+
+ /**
+ * @Route("/contact/add")
+ */
+public function AddMessage(Request $request)
+{
+    $data = json_decode($request->getContent(), true);
+    $loc = new Contact();
+    $loc->setEmail($data['mail']);
+    $loc->setName($data['name']);
+    $loc->setMessage($data['message']);
+    $objDateTime = date('d-m-y h:i:s');
+    $date=serialize($objDateTime);
+    $loc->setDate($date);
+    $em = $this->getDoctrine()->getManager();
+    $em->persist($loc);
+    $em->flush();
+
+    return new JsonResponse(array('success' => true));
+}
 
  /**
  * @Route("/devis/add", name="add_devis43")
